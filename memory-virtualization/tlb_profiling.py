@@ -4,7 +4,7 @@ import subprocess
 import math
 
 results = []
-trials = int(math.log(1024, 2));
+trials = int(math.log(16384, 2));
 
 for i in range(trials + 1):
     print("Calculating for {} pages".format(2 ** i))

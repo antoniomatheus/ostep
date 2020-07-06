@@ -1,4 +1,6 @@
+#define _GNU_SOURCE
 #include <stdlib.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <sys/time.h>
 
@@ -9,6 +11,20 @@
 int main(int argc, char *argv[]) {
   if (argc < 3) {
     printf("Usage: ./tlb [NUMBER OF PAGES] [NUMBER OF TRIALS]\n");
+    exit(1);
+  }
+
+  int s;
+  cpu_set_t cpuset;
+  pthread_t thread;
+
+  thread = pthread_self();
+  CPU_ZERO(&cpuset);
+  CPU_SET(0, &cpuset);
+
+  s = pthread_setaffinity_np(thread, sizeof(cpu_set_t), &cpuset);
+  if (s != 0) {
+    fprintf(stderr, "Failed to set cpu affinity. Aborting.\n");
     exit(1);
   }
 
